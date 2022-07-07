@@ -1,7 +1,7 @@
 package humannumbers
 
 import (
-	"errors"
+	"fmt"
 	"strings"
 )
 
@@ -95,7 +95,7 @@ func convertHumanStringToNumberSlice(humanString string) ([]int, error) {
 		} else if num, has := largeMagnitudes[word]; has {
 			numbers[i] = num
 		} else {
-			return nil, errors.New("unknown word " + word)
+			return nil, fmt.Errorf("unknown word '%s'", word)
 		}
 	}
 	return numbers, nil
@@ -124,18 +124,31 @@ func compressNumberSliceToInt(numbers []int) int {
 			if numbers[i-1] > 0 && numbers[i-1] < 10 {
 				numbers[i] = num * numbers[i-1]
 				numbers = remove(numbers, i-1)
+				i -= 1
+			}
+		}
+		if i < len(numbers)-1 && numbers[i] >= 100 && numbers[i] < 1000 {
+			if numbers[i+1] > 0 && numbers[i+1] < 100 {
+				numbers[i] = numbers[i] + numbers[i+1]
+				numbers = remove(numbers, i+1)
 			}
 		}
 	}
 
-	// compress the array into one number
-	for len(numbers) > 1 {
-		if numbers[0] > numbers[1] {
-			numbers[0] += numbers[1]
-			numbers = remove(numbers, 1)
-		} else {
-			numbers[0] *= numbers[1]
-			numbers = remove(numbers, 1)
+	// calculate large multiples i.e. the numbers before the large one
+	for i := 0; i < len(numbers); i++ {
+		if i > 0 && numbers[i] >= 1000 && numbers[i-1] < 1000 {
+			numbers[i] = numbers[i] * numbers[i-1]
+			numbers = remove(numbers, i-1)
+			i -= 1
+		}
+	}
+
+	// add on larger number specificity i.e. the numbers after the large one
+	for i := len(numbers) - 1; i > 0; i-- {
+		if numbers[i] < numbers[i-1] {
+			numbers[i-1] += numbers[i]
+			numbers = remove(numbers, i)
 		}
 	}
 	return numbers[0]
