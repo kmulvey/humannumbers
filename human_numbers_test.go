@@ -26,6 +26,10 @@ func TestParse(t *testing.T) {
 	total, err = Parse("two thousand three hundred and seven")
 	assert.NoError(t, err)
 	assert.Equal(t, 2307, total)
+
+	total, err = Parse("negative two million")
+	assert.NoError(t, err)
+	assert.Equal(t, int(-2e6), total)
 }
 
 func TestCompressNumberSliceToInt(t *testing.T) {

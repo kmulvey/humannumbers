@@ -61,13 +61,20 @@ var largeMagnitudes = map[string]int{
 func Parse(humanString string) (int, error) {
 	humanString = strings.ToLower(humanString)
 	humanString = strings.ReplaceAll(humanString, " and ", " ")
+	var negative = strings.Contains(humanString, "negative")
+	humanString = strings.ReplaceAll(humanString, "negative", " ")
 
 	var numberArr, err = convertHumanStringToNumberSlice(humanString)
 	if err != nil {
 		return 0, err
 	}
 
-	return compressNumberSliceToInt(numberArr), nil
+	var total = compressNumberSliceToInt(numberArr)
+	if negative {
+		total *= -1
+	}
+
+	return total, nil
 }
 
 // convertHumanStringToNumberSlice loops through the give string and places the
