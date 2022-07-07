@@ -5,8 +5,8 @@ Convert numbers in the form of words to ints
 
 ## Example:
 ```
-input:  "three million eight hundred and ninety four thousand seven hundred and sixty five"
-output: 3,894,765
+var number, err = humannumbers.Parse("three million eight hundred and ninety four thousand seven hundred and sixty five")
+// number == 3,894,765
 ```
 
 ## Limitations
