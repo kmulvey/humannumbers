@@ -38,9 +38,6 @@ var decades = map[string]int{
 	"eighty":  80,
 	"ninty":   90,
 }
-var century = map[string]int{
-	"hundred": 100,
-}
 
 var largeMagnitudes = map[string]int{
 	"thousand": 1000,
@@ -48,8 +45,6 @@ var largeMagnitudes = map[string]int{
 	"billion":  1e9,
 	"trillion": 1e12,
 }
-
-var ErrorParseException = errors.New("unable to parse human number")
 
 func Parse(humanString string) (int, error) {
 	humanString = strings.ToLower(humanString)
@@ -100,7 +95,6 @@ func compressNumberSliceToInt(numbers []int) int {
 			if numbers[i-1] > 0 && numbers[i-1] < 10 {
 				numbers[i] = num * numbers[i-1]
 				numbers = remove(numbers, i-1)
-				i++
 			}
 		}
 	}
