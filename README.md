@@ -1,5 +1,5 @@
 # humannumbers
-[![humannumbers](https://github.com/kmulvey/humannumbers/actions/workflows/release_build.yml/badge.svg)](https://github.com/kmulvey/humannumbers/actions/workflows/release_build.yml)
+[![humannumbers](https://github.com/kmulvey/humannumbers/actions/workflows/release_build.yml/badge.svg)](https://github.com/kmulvey/humannumbers/actions/workflows/release_build.yml) [![Go Report Card](https://goreportcard.com/badge/github.com/kmulvey/humannumbers)](https://goreportcard.com/report/github.com/kmulvey/humannumbers) [![Go Reference](https://pkg.go.dev/badge/github.com/kmulvey/humannumbers.svg)](https://pkg.go.dev/github.com/kmulvey/humannumbers)
 
 Convert numbers in the form of words to ints
 
