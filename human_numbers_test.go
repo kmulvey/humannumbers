@@ -28,7 +28,8 @@ func TestParse(t *testing.T) {
 	assert.Equal(t, 2307, total)
 }
 
-func TestScratch(t *testing.T) {
+func TestCompressNumberSliceToInt(t *testing.T) {
 	assert.Equal(t, 247_624, compressNumberSliceToInt([]int{2, 100, 40, 7, 1000, 6, 100, 20, 4}))
 	assert.Equal(t, 247, compressNumberSliceToInt([]int{2, 100, 40, 7}))
+	assert.Equal(t, 2, compressNumberSliceToInt([]int{2}))
 }

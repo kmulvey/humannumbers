@@ -40,12 +40,24 @@ var decades = map[string]int{
 }
 
 var largeMagnitudes = map[string]int{
-	"thousand": 1000,
-	"million":  1e6,
-	"billion":  1e9,
-	"trillion": 1e12,
+	"thousand":    1000,
+	"million":     1e6,
+	"billion":     1e9,
+	"trillion":    1e12,
+	"quadrillion": 1e15,
+	"quintillion": 1e18,
 }
 
+// Parse takes a string containing numbers in the form
+// of words, currently only English, and converts it
+// to an int. Examples:
+// two
+// forty three
+// eight thousand
+// eigth hundred and six
+// one thousand six hundred and forty
+// two thousand three hundred and eighty seven
+// two hundred and forty six thousand three hundred and eighty seven
 func Parse(humanString string) (int, error) {
 	humanString = strings.ToLower(humanString)
 	humanString = strings.ReplaceAll(humanString, " and ", " ")
@@ -58,6 +70,10 @@ func Parse(humanString string) (int, error) {
 	return compressNumberSliceToInt(numberArr), nil
 }
 
+// convertHumanStringToNumberSlice loops through the give string and places the
+// numeric equivelant to each word in an array of ints
+// e.g. input: "two hundred and forty seven thousand six hundred and twenty four
+// 		output: []int{2, 100, 40, 7, 1000, 6, 100, 20, 4}
 func convertHumanStringToNumberSlice(humanString string) ([]int, error) {
 	var humanArr = strings.Fields(humanString)
 	var numbers = make([]int, len(humanArr))
@@ -78,6 +94,12 @@ func convertHumanStringToNumberSlice(humanString string) ([]int, error) {
 	return numbers, nil
 }
 
+// compressNumberSliceToInt takes an int slice of numbers
+// and either adds or multiplies them depending on their
+// placement in the slice until there is only one
+// element in the slice.
+// e.g. input: []int{2, 100, 40, 7, 1000, 6, 100, 20, 4}
+// 		output: 247624
 func compressNumberSliceToInt(numbers []int) int {
 	// calculate decades
 	for i, num := range numbers {
@@ -115,11 +137,3 @@ func compressNumberSliceToInt(numbers []int) int {
 func remove(slice []int, s int) []int {
 	return append(slice[:s], slice[s+1:]...)
 }
-
-// two
-// forty three
-// eight thousand
-// eigth hundred and six
-// one thousand six hundred and forty
-// two thousand three hundred and eighty seven
-// two hundred and forty six thousand three hundred and eighty seven
