@@ -58,22 +58,55 @@ var largeMagnitudes = map[string]int{
 // one thousand six hundred and forty
 // two thousand three hundred and eighty seven
 // two hundred and forty six thousand three hundred and eighty seven
-func Parse(humanString string) (int, error) {
+func Parse(humanString string) (float64, error) {
+	// some linting
 	humanString = strings.ToLower(humanString)
 	humanString = strings.ReplaceAll(humanString, " and ", " ")
+	// handle negatives
 	var negative = strings.Contains(humanString, "negative")
 	humanString = strings.ReplaceAll(humanString, "negative", " ")
 
-	var numberArr, err = convertHumanStringToNumberSlice(humanString)
+	// handle decimals
+	var base = humanString
+	var decimal float64
+	var err error
+	if strings.Contains(humanString, "point") {
+		var arr = strings.Split(base, "point")
+		base = arr[0]
+		decimal, err = handleDecimals(arr[1])
+	}
+
+	baseArr, err := convertHumanStringToNumberSlice(base)
 	if err != nil {
 		return 0, err
 	}
 
-	var total = compressNumberSliceToInt(numberArr)
+	var baseTotal = compressNumberSliceToInt(baseArr)
+
+	if decimal != 0.0 {
+		baseTotal += decimal
+	}
 	if negative {
-		total *= -1
+		baseTotal *= -1
 	}
 
+	return baseTotal, nil
+}
+
+// handleDecimals is pretty simple, due to the language, it just
+// smashes the digits together behind the decimal point
+func handleDecimals(humanString string) (float64, error) {
+	var decimalArr, err = convertHumanStringToNumberSlice(humanString)
+	if err != nil {
+		return 0, err
+	}
+
+	var total float64
+	var multiplier = 0.1
+	for _, digit := range decimalArr {
+		total += float64(digit) * multiplier
+		multiplier *= .10
+	}
 	return total, nil
 }
 
@@ -107,7 +140,7 @@ func convertHumanStringToNumberSlice(humanString string) ([]int, error) {
 // element in the slice.
 // e.g. input: []int{2, 100, 40, 7, 1000, 6, 100, 20, 4}
 // 		output: 247624
-func compressNumberSliceToInt(numbers []int) int {
+func compressNumberSliceToInt(numbers []int) float64 {
 	// calculate decades
 	for i, num := range numbers {
 		if num >= 20 && num <= 90 {
@@ -151,7 +184,7 @@ func compressNumberSliceToInt(numbers []int) int {
 			numbers = remove(numbers, i)
 		}
 	}
-	return numbers[0]
+	return float64(numbers[0])
 }
 
 func remove(slice []int, s int) []int {
