@@ -74,6 +74,9 @@ func Parse(humanString string) (float64, error) {
 		var arr = strings.Split(base, "point")
 		base = arr[0]
 		decimal, err = handleDecimals(arr[1])
+		if err != nil {
+			return 0, err
+		}
 	}
 
 	baseArr, err := convertHumanStringToNumberSlice(base)
