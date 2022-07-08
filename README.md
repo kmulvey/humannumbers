@@ -10,8 +10,7 @@ var number, err = humannumbers.Parse("three million eight hundred and ninety fou
 ```
 
 ## Limitations
-- English Only, interested in i18n [help wanted]
-- Does not support floats (yet)
+- English Only
 
 ## How it works
 - input: "three million eight hundred ninety four thousand seven hundred five"
