@@ -15,7 +15,8 @@ var number, err = humannumbers.Parse("three million eight hundred and ninety fou
 ## How it works
 - input: "three million eight hundred ninety four thousand seven hundred five"
 - Remove unnecessary words (and)
+- if there are decimals, just smash them together behind a '.' and add it to the result of below
 - Parse each word into a number (int)
 - []int{3, 1e6, 8, 100, 90, 4, 1000, 7, 100, 5}
 - Go though this array and apply rules for addition and multiplication
-- result: int(3_894_705)
+- result: float64(3_894_705)
