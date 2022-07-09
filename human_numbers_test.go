@@ -49,19 +49,60 @@ func TestConvertHumanStringToNumberSlice(t *testing.T) {
 }
 
 func TestCompressNumberSliceToInt(t *testing.T) {
-	var result, err = compressNumberSliceToInt([]int{2, 100, 40, 7, 1000, 6, 100, 20, 4})
+
+	var result, err = compressNumberSliceToInt([]int{2})
 	assert.NoError(t, err)
-	assert.Equal(t, float64(247_624), result)
+	assert.Equal(t, float64(2), result)
+
+	result, err = compressNumberSliceToInt([]int{17})
+	assert.NoError(t, err)
+	assert.Equal(t, float64(17), result)
+
+	result, err = compressNumberSliceToInt([]int{20})
+	assert.NoError(t, err)
+	assert.Equal(t, float64(20), result)
+
+	result, err = compressNumberSliceToInt([]int{90, 9})
+	assert.NoError(t, err)
+	assert.Equal(t, float64(99), result)
+
+	result, err = compressNumberSliceToInt([]int{100, 7})
+	assert.NoError(t, err)
+	assert.Equal(t, float64(107), result)
+
+	result, err = compressNumberSliceToInt([]int{100, 40})
+	assert.NoError(t, err)
+	assert.Equal(t, float64(140), result)
 
 	result, err = compressNumberSliceToInt([]int{2, 100, 40, 7})
 	assert.NoError(t, err)
 	assert.Equal(t, float64(247), result)
 
-	result, err = compressNumberSliceToInt([]int{2})
+	result, err = compressNumberSliceToInt([]int{7, 1000, 6})
 	assert.NoError(t, err)
-	assert.Equal(t, float64(2), result)
+	assert.Equal(t, float64(7006), result)
+
+	result, err = compressNumberSliceToInt([]int{7, 1000, 60})
+	assert.NoError(t, err)
+	assert.Equal(t, float64(7060), result)
+
+	result, err = compressNumberSliceToInt([]int{7, 1000, 50, 5})
+	assert.NoError(t, err)
+	assert.Equal(t, float64(7055), result)
+
+	result, err = compressNumberSliceToInt([]int{2, 100, 40, 7, 1000, 6, 100, 20, 4})
+	assert.NoError(t, err)
+	assert.Equal(t, float64(247_624), result)
 
 	result, err = compressNumberSliceToInt([]int{3, 1e6, 8, 100, 90, 4, 1000, 7, 100, 60, 5})
 	assert.NoError(t, err)
 	assert.Equal(t, float64(3_894_765), result)
+
+	result, err = compressNumberSliceToInt([]int{3, 1e6, 8})
+	assert.NoError(t, err)
+	assert.Equal(t, float64(3_000_008), result)
+
+	result, err = compressNumberSliceToInt([]int{3, 100, 1e6, 8})
+	assert.NoError(t, err)
+	assert.Equal(t, float64(300_000_008), result)
 }

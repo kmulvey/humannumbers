@@ -147,11 +147,16 @@ func convertHumanStringToNumberSlice(humanString string) ([]int, error) {
 // e.g. input: []int{2, 100, 40, 7, 1000, 6, 100, 20, 4}
 // 		output: 247624
 func compressNumberSliceToInt(numbers []int) (float64, error) {
+
+	if len(numbers) == 1 {
+		return float64(numbers[0]), nil
+	}
+
 	// calculate decades
-	for i, num := range numbers {
-		if num >= 20 && num <= 90 {
+	for i := 0; i < len(numbers)-1; i++ {
+		if numbers[i] >= 20 && numbers[i] <= 90 {
 			if numbers[i+1] > 0 && numbers[i+1] < 10 {
-				numbers[i] = num + numbers[i+1]
+				numbers[i] = numbers[i] + numbers[i+1]
 				numbers = remove(numbers, i+1)
 			}
 		}
