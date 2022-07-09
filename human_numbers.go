@@ -84,7 +84,10 @@ func Parse(humanString string) (float64, error) {
 		return 0, err
 	}
 
-	var baseTotal = compressNumberSliceToInt(baseArr)
+	baseTotal, err := compressNumberSliceToInt(baseArr)
+	if err != nil {
+		return 0, err
+	}
 
 	if decimal != 0.0 {
 		baseTotal += decimal
@@ -143,7 +146,7 @@ func convertHumanStringToNumberSlice(humanString string) ([]int, error) {
 // element in the slice.
 // e.g. input: []int{2, 100, 40, 7, 1000, 6, 100, 20, 4}
 // 		output: 247624
-func compressNumberSliceToInt(numbers []int) float64 {
+func compressNumberSliceToInt(numbers []int) (float64, error) {
 	// calculate decades
 	for i, num := range numbers {
 		if num >= 20 && num <= 90 {
@@ -187,7 +190,12 @@ func compressNumberSliceToInt(numbers []int) float64 {
 			numbers = remove(numbers, i)
 		}
 	}
-	return float64(numbers[0])
+
+	if len(numbers) != 1 {
+		return 0.0, fmt.Errorf("number array was no fully reduced: %+v", numbers)
+	}
+
+	return float64(numbers[0]), nil
 }
 
 func remove(slice []int, s int) []int {

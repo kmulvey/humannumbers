@@ -49,8 +49,19 @@ func TestConvertHumanStringToNumberSlice(t *testing.T) {
 }
 
 func TestCompressNumberSliceToInt(t *testing.T) {
-	assert.Equal(t, float64(247_624), compressNumberSliceToInt([]int{2, 100, 40, 7, 1000, 6, 100, 20, 4}))
-	assert.Equal(t, float64(247), compressNumberSliceToInt([]int{2, 100, 40, 7}))
-	assert.Equal(t, float64(2), compressNumberSliceToInt([]int{2}))
-	assert.Equal(t, float64(3_894_765), compressNumberSliceToInt([]int{3, 1e6, 8, 100, 90, 4, 1000, 7, 100, 60, 5}))
+	var result, err = compressNumberSliceToInt([]int{2, 100, 40, 7, 1000, 6, 100, 20, 4})
+	assert.NoError(t, err)
+	assert.Equal(t, float64(247_624), result)
+
+	result, err = compressNumberSliceToInt([]int{2, 100, 40, 7})
+	assert.NoError(t, err)
+	assert.Equal(t, float64(247), result)
+
+	result, err = compressNumberSliceToInt([]int{2})
+	assert.NoError(t, err)
+	assert.Equal(t, float64(2), result)
+
+	result, err = compressNumberSliceToInt([]int{3, 1e6, 8, 100, 90, 4, 1000, 7, 100, 60, 5})
+	assert.NoError(t, err)
+	assert.Equal(t, float64(3_894_765), result)
 }
