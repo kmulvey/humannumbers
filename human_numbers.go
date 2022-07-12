@@ -2,51 +2,9 @@ package humannumbers
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 )
-
-var base = map[string]int{
-	"zero":      0,
-	"one":       1,
-	"two":       2,
-	"three":     3,
-	"four":      4,
-	"five":      5,
-	"six":       6,
-	"seven":     7,
-	"eight":     8,
-	"nine":      9,
-	"ten":       10,
-	"eleven":    11,
-	"twelve":    12,
-	"thirteen":  13,
-	"fourteen":  14,
-	"fifteen":   15,
-	"sixteen":   16,
-	"seventeen": 17,
-	"eightteen": 18,
-	"nineteen":  19,
-}
-
-var decades = map[string]int{
-	"twenty":  20,
-	"thirty":  30,
-	"forty":   40,
-	"fifty":   50,
-	"sixty":   60,
-	"seventy": 70,
-	"eighty":  80,
-	"ninty":   90,
-}
-
-var largeMagnitudes = map[string]int{
-	"thousand":    1000,
-	"million":     1e6,
-	"billion":     1e9,
-	"trillion":    1e12,
-	"quadrillion": 1e15,
-	"quintillion": 1e18,
-}
 
 // Parse takes a string containing numbers in the form
 // of words, currently only English, and converts it
@@ -201,6 +159,39 @@ func compressNumberSliceToInt(numbers []int) (float64, error) {
 	}
 
 	return float64(numbers[0]), nil
+}
+
+func floatToString(number float64) string {
+	var numStr = strconv.FormatFloat(123.456, 'f', 10, 64) // 10 may not be enough
+	var decimalIndex int
+	var multiple = 10
+	var builder = strings.Builder{}
+
+	for i := len(numStr) - 1; i >= 0; i-- {
+		if i < decimalIndex-1 {
+			fmt.Println(int(numStr[i]-'0'), int(numStr[i]-'0')*multiple)
+			decade, has := decadesReverse[int(numStr[i]-'0')*multiple]
+			if has {
+				builder.WriteString(decade)
+			}
+			largeMag, has := largeMagnitudesReverse[int(numStr[i]-'0')*multiple]
+			if has {
+				builder.WriteString(largeMag)
+				builder.WriteString(" ")
+				builder.WriteString(baseReverse[int(numStr[i]-'0')])
+			}
+			builder.WriteString(" ")
+			multiple *= 10
+		} else if numStr[i] != 46 {
+			builder.WriteString(baseReverse[int(numStr[i]-'0')])
+			builder.WriteString(" ")
+		} else {
+			decimalIndex = i
+			builder.WriteString("dot ")
+		}
+	}
+
+	return builder.String()
 }
 
 func remove(slice []int, s int) []int {
