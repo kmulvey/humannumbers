@@ -2,7 +2,6 @@ package humannumbers
 
 import (
 	"fmt"
-	"strconv"
 	"strings"
 )
 
@@ -161,37 +160,32 @@ func compressNumberSliceToInt(numbers []int) (float64, error) {
 	return float64(numbers[0]), nil
 }
 
-func floatToString(number float64) string {
-	var numStr = strconv.FormatFloat(123.456, 'f', 10, 64) // 10 may not be enough
+func FloatToString(number float64) string {
+	var numStr = fmt.Sprint(number)
 	var decimalIndex int
 	var multiple = 10
-	var builder = strings.Builder{}
+	var wordsArr []string
 
 	for i := len(numStr) - 1; i >= 0; i-- {
 		if i < decimalIndex-1 {
-			fmt.Println(int(numStr[i]-'0'), int(numStr[i]-'0')*multiple)
 			decade, has := decadesReverse[int(numStr[i]-'0')*multiple]
 			if has {
-				builder.WriteString(decade)
+				wordsArr = append([]string{decade}, wordsArr...)
 			}
 			largeMag, has := largeMagnitudesReverse[int(numStr[i]-'0')*multiple]
 			if has {
-				builder.WriteString(largeMag)
-				builder.WriteString(" ")
-				builder.WriteString(baseReverse[int(numStr[i]-'0')])
+				wordsArr = append([]string{baseReverse[int(numStr[i]-'0')], largeMag}, wordsArr...)
 			}
-			builder.WriteString(" ")
 			multiple *= 10
-		} else if numStr[i] != 46 {
-			builder.WriteString(baseReverse[int(numStr[i]-'0')])
-			builder.WriteString(" ")
+		} else if numStr[i] != 46 { // ascii: .
+			wordsArr = append([]string{baseReverse[int(numStr[i]-'0')]}, wordsArr...)
 		} else {
 			decimalIndex = i
-			builder.WriteString("dot ")
+			wordsArr = append([]string{"dot"}, wordsArr...)
 		}
 	}
 
-	return builder.String()
+	return strings.Join(wordsArr, " ")
 }
 
 func remove(slice []int, s int) []int {

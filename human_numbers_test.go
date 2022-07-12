@@ -113,5 +113,5 @@ func TestCompressNumberSliceToInt(t *testing.T) {
 
 func TestFloatToSlice(t *testing.T) {
 	t.Parallel()
-	fmt.Println(floatToString(1.0))
+	fmt.Println(FloatToString(123.456))
 }
