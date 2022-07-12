@@ -1,12 +1,15 @@
 package humannumbers
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
 
 func TestParse(t *testing.T) {
+	t.Parallel()
+
 	var total, err = Parse("three")
 	assert.NoError(t, err)
 	assert.Equal(t, float64(3), total)
@@ -49,6 +52,7 @@ func TestConvertHumanStringToNumberSlice(t *testing.T) {
 }
 
 func TestCompressNumberSliceToInt(t *testing.T) {
+	t.Parallel()
 
 	var result, err = compressNumberSliceToInt([]int{2})
 	assert.NoError(t, err)
@@ -105,4 +109,9 @@ func TestCompressNumberSliceToInt(t *testing.T) {
 	result, err = compressNumberSliceToInt([]int{3, 100, 1e6, 8})
 	assert.NoError(t, err)
 	assert.Equal(t, float64(300_000_008), result)
+}
+
+func TestFloatToSlice(t *testing.T) {
+	t.Parallel()
+	fmt.Println(floatToString(1.0))
 }
