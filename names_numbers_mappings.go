@@ -86,3 +86,22 @@ var largeMagnitudesReverse = map[int]string{
 	1e15: "quadrillion",
 	1e18: "quintillion",
 }
+
+// largeMagToString is a convience func to work the above map
+// maybe we no longer need the map?
+func largeMagToString(number int) string {
+	if number >= 100 && number < 1000 {
+		return largeMagnitudesReverse[100]
+	} else if number >= 1000 && number < 1e6 {
+		return largeMagnitudesReverse[1000]
+	} else if number >= 1e6 && number < 1e9 {
+		return largeMagnitudesReverse[1e6]
+	} else if number >= 1e9 && number < 1e12 {
+		return largeMagnitudesReverse[1e9]
+	} else if number >= 1e12 && number < 1e15 {
+		return largeMagnitudesReverse[1e12]
+	} else if number >= 1e15 && number < 1e18 {
+		return largeMagnitudesReverse[1e15]
+	}
+	return ""
+}

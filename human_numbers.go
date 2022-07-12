@@ -160,11 +160,18 @@ func compressNumberSliceToInt(numbers []int) (float64, error) {
 	return float64(numbers[0]), nil
 }
 
-func FloatToString(number float64) string {
+// floatToString is a work in progress, its intention is to turn floats into human text
+func floatToString(number float64) string {
 	var numStr = fmt.Sprint(number)
-	var decimalIndex int
+	var decimalIndex int // this helps us know when we have gotten to the base and thus need to start multiplying
 	var multiple = 10
 	var wordsArr []string
+
+	// in case there is no '.', we need to get ourselves into the
+	// first if() in the loop
+	if !strings.Contains(numStr, ".") {
+		decimalIndex = len(numStr)
+	}
 
 	for i := len(numStr) - 1; i >= 0; i-- {
 		if i < decimalIndex-1 {
@@ -172,8 +179,8 @@ func FloatToString(number float64) string {
 			if has {
 				wordsArr = append([]string{decade}, wordsArr...)
 			}
-			largeMag, has := largeMagnitudesReverse[int(numStr[i]-'0')*multiple]
-			if has {
+			var largeMag = largeMagToString(int(numStr[i]-'0') * multiple)
+			if largeMag != "" {
 				wordsArr = append([]string{baseReverse[int(numStr[i]-'0')], largeMag}, wordsArr...)
 			}
 			multiple *= 10

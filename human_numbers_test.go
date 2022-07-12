@@ -1,7 +1,6 @@
 package humannumbers
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -113,5 +112,10 @@ func TestCompressNumberSliceToInt(t *testing.T) {
 
 func TestFloatToSlice(t *testing.T) {
 	t.Parallel()
-	fmt.Println(FloatToString(123.456))
+
+	assert.Equal(t, "two", floatToString(2.0))
+	assert.Equal(t, "forty five", floatToString(45))
+	assert.Equal(t, "one hundred twenty three dot four five six", floatToString(123.456))
+	assert.Equal(t, "seven thousand one hundred twenty three dot four five six", floatToString(7123.456))
+	assert.Equal(t, "seven thousand one hundred twenty three dot four five six", floatToString(57123))
 }
