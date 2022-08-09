@@ -11,7 +11,7 @@ import (
 // two
 // forty three
 // eight thousand
-// eigth hundred and six
+// eight hundred and six
 // one thousand six hundred and forty
 // two thousand three hundred and eighty seven
 // two hundred and forty six thousand three hundred and eighty seven
@@ -74,7 +74,7 @@ func handleDecimals(humanString string) (float64, error) {
 }
 
 // convertHumanStringToNumberSlice loops through the give string and places the
-// numeric equivelant to each word in an array of ints
+// numeric equivalent to each word in an array of ints
 // e.g. input: "two hundred and forty seven thousand six hundred and twenty four
 // 		output: []int{2, 100, 40, 7, 1000, 6, 100, 20, 4}
 func convertHumanStringToNumberSlice(humanString string) ([]int, error) {
@@ -113,7 +113,7 @@ func compressNumberSliceToInt(numbers []int) (float64, error) {
 	for i := 0; i < len(numbers)-1; i++ {
 		if numbers[i] >= 20 && numbers[i] <= 90 {
 			if numbers[i+1] > 0 && numbers[i+1] < 10 {
-				numbers[i] = numbers[i] + numbers[i+1]
+				numbers[i] += numbers[i+1]
 				numbers = remove(numbers, i+1)
 			}
 		}
@@ -130,7 +130,7 @@ func compressNumberSliceToInt(numbers []int) (float64, error) {
 		}
 		if i < len(numbers)-1 && numbers[i] >= 100 && numbers[i] < 1000 {
 			if numbers[i+1] > 0 && numbers[i+1] < 100 {
-				numbers[i] = numbers[i] + numbers[i+1]
+				numbers[i] += numbers[i+1]
 				numbers = remove(numbers, i+1)
 			}
 		}
@@ -139,7 +139,7 @@ func compressNumberSliceToInt(numbers []int) (float64, error) {
 	// calculate large multiples i.e. the numbers before the large one
 	for i := 0; i < len(numbers); i++ {
 		if i > 0 && numbers[i] >= 1000 && numbers[i-1] < 1000 {
-			numbers[i] = numbers[i] * numbers[i-1]
+			numbers[i] *= numbers[i-1]
 			numbers = remove(numbers, i-1)
 			i -= 1
 		}
@@ -174,7 +174,8 @@ func floatToString(number float64) string {
 	}
 
 	for i := len(numStr) - 1; i >= 0; i-- {
-		if i < decimalIndex-1 {
+		switch {
+		case i < decimalIndex-1:
 			decade, has := decadesReverse[int(numStr[i]-'0')*multiple]
 			if has {
 				wordsArr = append([]string{decade}, wordsArr...)
@@ -184,9 +185,9 @@ func floatToString(number float64) string {
 				wordsArr = append([]string{baseReverse[int(numStr[i]-'0')], largeMag}, wordsArr...)
 			}
 			multiple *= 10
-		} else if numStr[i] != 46 { // ascii: .
+		case numStr[i] != 46: // ascii: .
 			wordsArr = append([]string{baseReverse[int(numStr[i]-'0')]}, wordsArr...)
-		} else {
+		default:
 			decimalIndex = i
 			wordsArr = append([]string{"dot"}, wordsArr...)
 		}
