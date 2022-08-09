@@ -2,6 +2,7 @@ package humannumbers
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 )
 
@@ -162,35 +163,50 @@ func compressNumberSliceToInt(numbers []int) (float64, error) {
 
 // floatToString is a work in progress, its intention is to turn floats into human text
 func floatToString(number float64) string {
-	var numStr = fmt.Sprint(number)
-	var decimalIndex int // this helps us know when we have gotten to the base and thus need to start multiplying
-	var multiple = 10
+	var numArr = strings.Split(strconv.FormatFloat(number, 'f', -1, 64), ".")
+	var minorMultiple = 1
+	var majorMultiple = 1
 	var wordsArr []string
 
-	// in case there is no '.', we need to get ourselves into the
-	// first if() in the loop
-	if !strings.Contains(numStr, ".") {
-		decimalIndex = len(numStr)
+	// take care of the decimals
+	if len(numArr) == 2 {
+		var decimalArr = numArr[1]
+		for i := len(decimalArr) - 1; i >= 0; i-- {
+			wordsArr = append([]string{baseReverse[int(decimalArr[i]-'0')]}, wordsArr...)
+		}
+		wordsArr = append([]string{"dot"}, wordsArr...)
 	}
 
-	for i := len(numStr) - 1; i >= 0; i-- {
-		switch {
-		case i < decimalIndex-1:
-			decade, has := decadesReverse[int(numStr[i]-'0')*multiple]
+	var nextIsMajor bool
+	var wholeNumber = numArr[0]
+	for i := len(wholeNumber) - 1; i >= 0; i-- {
+		//fmt.Printf("i: %d, minorMultiple: %d, majorMultiple: %d, numStr[i]: %s, ", i, minorMultiple, majorMultiple, string(wholeNumber[i]))
+
+		if nextIsMajor {
+			var largeMag = largeMagToString(int(wholeNumber[i]-'0') * majorMultiple)
+			if largeMag != "" {
+				wordsArr = append([]string{largeMag}, wordsArr...)
+			}
+			nextIsMajor = false
+		}
+		if minorMultiple == 1 {
+			wordsArr = append([]string{baseReverse[int(wholeNumber[i]-'0')]}, wordsArr...)
+		} else if minorMultiple == 10 {
+			decade, has := decadesReverse[int(wholeNumber[i]-'0')*minorMultiple]
 			if has {
 				wordsArr = append([]string{decade}, wordsArr...)
 			}
-			var largeMag = largeMagToString(int(numStr[i]-'0') * multiple)
-			if largeMag != "" {
-				wordsArr = append([]string{baseReverse[int(numStr[i]-'0')], largeMag}, wordsArr...)
-			}
-			multiple *= 10
-		case numStr[i] != 46: // ascii: .
-			wordsArr = append([]string{baseReverse[int(numStr[i]-'0')]}, wordsArr...)
-		default:
-			decimalIndex = i
-			wordsArr = append([]string{"dot"}, wordsArr...)
+		} else if minorMultiple == 100 {
+			wordsArr = append([]string{baseReverse[int(wholeNumber[i]-'0')], "hundred"}, wordsArr...)
+			nextIsMajor = true
 		}
+		minorMultiple *= 10
+		majorMultiple *= 10
+		if minorMultiple == 1000 {
+			minorMultiple = 1
+		}
+
+		//fmt.Printf("wordsArr: %+v \n", wordsArr)
 	}
 
 	return strings.Join(wordsArr, " ")

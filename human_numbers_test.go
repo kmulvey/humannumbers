@@ -116,6 +116,7 @@ func TestFloatToSlice(t *testing.T) {
 	assert.Equal(t, "two", floatToString(2.0))
 	assert.Equal(t, "forty five", floatToString(45))
 	assert.Equal(t, "one hundred twenty three dot four five six", floatToString(123.456))
-	assert.Equal(t, "seven thousand one hundred twenty three dot four five six", floatToString(7123.456))
-	// assert.Equal(t, "seven thousand one hundred twenty three dot four five six", floatToString(57123))
+	assert.Equal(t, "seven thousand one hundred twenty three dot four five six", floatToString(7_123.456))
+	assert.Equal(t, "fifty seven thousand one hundred twenty three", floatToString(57_123))
+	assert.Equal(t, "nine hundred eighty seven million six hundred fifty four thousand three hundred twenty one", floatToString(987_654_321))
 }
