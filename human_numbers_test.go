@@ -33,7 +33,7 @@ func TestParse(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, float64(-2e6), total)
 
-	total, err = Parse("three million eight hundred and ninty four thousand seven hundred and sixty five")
+	total, err = Parse("three million eight hundred and ninety four thousand seven hundred and sixty five")
 	assert.NoError(t, err)
 	assert.Equal(t, float64(3_894_765), total)
 
@@ -45,7 +45,7 @@ func TestParse(t *testing.T) {
 func TestConvertHumanStringToNumberSlice(t *testing.T) {
 	t.Parallel()
 
-	var arr, err = convertHumanStringToNumberSlice("three million eight hundred ninty four thousand seven hundred five") // the word 'and' would have been removed by Parse()
+	var arr, err = convertHumanStringToNumberSlice("three million eight hundred ninety four thousand seven hundred five") // the word 'and' would have been removed by Parse()
 	assert.NoError(t, err)
 	assert.Equal(t, []int{3, 1e6, 8, 100, 90, 4, 1000, 7, 100, 5}, arr)
 }
@@ -117,5 +117,5 @@ func TestFloatToSlice(t *testing.T) {
 	assert.Equal(t, "forty five", floatToString(45))
 	assert.Equal(t, "one hundred twenty three dot four five six", floatToString(123.456))
 	assert.Equal(t, "seven thousand one hundred twenty three dot four five six", floatToString(7123.456))
-	//assert.Equal(t, "seven thousand one hundred twenty three dot four five six", floatToString(57123))
+	// assert.Equal(t, "seven thousand one hundred twenty three dot four five six", floatToString(57123))
 }

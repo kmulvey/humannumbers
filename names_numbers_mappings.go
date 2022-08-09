@@ -54,7 +54,7 @@ var decades = map[string]int{
 	"sixty":   60,
 	"seventy": 70,
 	"eighty":  80,
-	"ninty":   90,
+	"ninety":  90,
 }
 
 var decadesReverse = map[int]string{
@@ -65,7 +65,7 @@ var decadesReverse = map[int]string{
 	60: "sixty",
 	70: "seventy",
 	80: "eighty",
-	90: "ninty",
+	90: "ninety",
 }
 
 var largeMagnitudes = map[string]int{
@@ -90,17 +90,18 @@ var largeMagnitudesReverse = map[int]string{
 // largeMagToString is a convience func to work the above map
 // maybe we no longer need the map?
 func largeMagToString(number int) string {
-	if number >= 100 && number < 1000 {
+	switch {
+	case number >= 100 && number < 1000:
 		return largeMagnitudesReverse[100]
-	} else if number >= 1000 && number < 1e6 {
+	case number >= 1000 && number < 1e6:
 		return largeMagnitudesReverse[1000]
-	} else if number >= 1e6 && number < 1e9 {
+	case number >= 1e6 && number < 1e9:
 		return largeMagnitudesReverse[1e6]
-	} else if number >= 1e9 && number < 1e12 {
+	case number >= 1e9 && number < 1e12:
 		return largeMagnitudesReverse[1e9]
-	} else if number >= 1e12 && number < 1e15 {
+	case number >= 1e12 && number < 1e15:
 		return largeMagnitudesReverse[1e12]
-	} else if number >= 1e15 && number < 1e18 {
+	case number >= 1e15 && number < 1e18:
 		return largeMagnitudesReverse[1e15]
 	}
 	return ""
