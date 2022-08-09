@@ -113,7 +113,7 @@ func compressNumberSliceToInt(numbers []int) (float64, error) {
 	for i := 0; i < len(numbers)-1; i++ {
 		if numbers[i] >= 20 && numbers[i] <= 90 {
 			if numbers[i+1] > 0 && numbers[i+1] < 10 {
-				numbers[i] *= numbers[i+1]
+				numbers[i] += numbers[i+1]
 				numbers = remove(numbers, i+1)
 			}
 		}
@@ -130,7 +130,7 @@ func compressNumberSliceToInt(numbers []int) (float64, error) {
 		}
 		if i < len(numbers)-1 && numbers[i] >= 100 && numbers[i] < 1000 {
 			if numbers[i+1] > 0 && numbers[i+1] < 100 {
-				numbers[i] *= numbers[i+1]
+				numbers[i] += numbers[i+1]
 				numbers = remove(numbers, i+1)
 			}
 		}
