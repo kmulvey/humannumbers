@@ -180,7 +180,6 @@ func floatToString(number float64) string {
 	var nextIsMajor bool
 	var wholeNumber = numArr[0]
 	for i := len(wholeNumber) - 1; i >= 0; i-- {
-		//fmt.Printf("i: %d, minorMultiple: %d, majorMultiple: %d, numStr[i]: %s, ", i, minorMultiple, majorMultiple, string(wholeNumber[i]))
 
 		if nextIsMajor {
 			var largeMag = largeMagToString(int(wholeNumber[i]-'0') * majorMultiple)
@@ -189,14 +188,16 @@ func floatToString(number float64) string {
 			}
 			nextIsMajor = false
 		}
-		if minorMultiple == 1 {
+
+		switch minorMultiple {
+		case 1:
 			wordsArr = append([]string{baseReverse[int(wholeNumber[i]-'0')]}, wordsArr...)
-		} else if minorMultiple == 10 {
+		case 10:
 			decade, has := decadesReverse[int(wholeNumber[i]-'0')*minorMultiple]
 			if has {
 				wordsArr = append([]string{decade}, wordsArr...)
 			}
-		} else if minorMultiple == 100 {
+		case 100:
 			wordsArr = append([]string{baseReverse[int(wholeNumber[i]-'0')], "hundred"}, wordsArr...)
 			nextIsMajor = true
 		}
@@ -205,10 +206,7 @@ func floatToString(number float64) string {
 		if minorMultiple == 1000 {
 			minorMultiple = 1
 		}
-
-		//fmt.Printf("wordsArr: %+v \n", wordsArr)
 	}
-
 	return strings.Join(wordsArr, " ")
 }
 
