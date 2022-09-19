@@ -27,11 +27,15 @@ jobs:
           version: latest
           args: --timeout=5m
 
+      - name: Govulncheck
+        uses: kmulvey/govulncheck-action@main
+
       - name: Build & Test
         run: |
           go mod tidy
           go test -v -race -count 1 -parallel 5 -covermode=atomic -coverprofile=coverage.out ./...
           go build -v -ldflags="-s -w" ./...
+
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3  
         with:
