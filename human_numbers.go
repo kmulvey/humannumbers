@@ -8,14 +8,14 @@ import (
 
 // Parse takes a string containing numbers in the form
 // of words, currently only English, and converts it
-// to an int. Examples:
+// to float64. Examples:
 // two
 // forty three
 // eight thousand
 // eight hundred and six
 // one thousand six hundred and forty
 // two thousand three hundred and eighty seven
-// two hundred and forty six thousand three hundred and eighty seven
+// two hundred and forty six thousand three hundred and eighty seven.
 func Parse(humanString string) (float64, error) {
 	// some linting
 	humanString = strings.ToLower(humanString)
@@ -77,7 +77,8 @@ func handleDecimals(humanString string) (float64, error) {
 // convertHumanStringToNumberSlice loops through the give string and places the
 // numeric equivalent to each word in an array of ints
 // e.g. input: "two hundred and forty seven thousand six hundred and twenty four
-// 		output: []int{2, 100, 40, 7, 1000, 6, 100, 20, 4}
+//
+//	output: []int{2, 100, 40, 7, 1000, 6, 100, 20, 4}
 func convertHumanStringToNumberSlice(humanString string) ([]int, error) {
 	var humanArr = strings.Fields(humanString)
 	var numbers = make([]int, len(humanArr))
@@ -103,7 +104,8 @@ func convertHumanStringToNumberSlice(humanString string) ([]int, error) {
 // placement in the slice until there is only one
 // element in the slice.
 // e.g. input: []int{2, 100, 40, 7, 1000, 6, 100, 20, 4}
-// 		output: 247624
+//
+//	output: 247624
 func compressNumberSliceToInt(numbers []int) (float64, error) {
 
 	if len(numbers) == 1 {
