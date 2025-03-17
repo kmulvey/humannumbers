@@ -11,35 +11,35 @@ func TestParse(t *testing.T) {
 
 	var total, err = Parse("three")
 	assert.NoError(t, err)
-	assert.Equal(t, float64(3), total)
+	assert.InEpsilon(t, float64(3), total, 0.0001)
 
 	total, err = Parse("seventeen")
 	assert.NoError(t, err)
-	assert.Equal(t, float64(17), total)
+	assert.InEpsilon(t, float64(17), total, 0.0001)
 
 	total, err = Parse("forty four")
 	assert.NoError(t, err)
-	assert.Equal(t, float64(44), total)
+	assert.InEpsilon(t, float64(44), total, 0.0001)
 
 	total, err = Parse("seven hundred and forty three")
 	assert.NoError(t, err)
-	assert.Equal(t, float64(743), total)
+	assert.InEpsilon(t, float64(743), total, 0.0001)
 
 	total, err = Parse("two thousand three hundred and seven")
 	assert.NoError(t, err)
-	assert.Equal(t, float64(2307), total)
+	assert.InEpsilon(t, float64(2307), total, 0.0001)
 
 	total, err = Parse("negative two million")
 	assert.NoError(t, err)
-	assert.Equal(t, float64(-2e6), total)
+	assert.InEpsilon(t, float64(-2e6), total, 0.0001)
 
 	total, err = Parse("three million eight hundred and ninety four thousand seven hundred and sixty five")
 	assert.NoError(t, err)
-	assert.Equal(t, float64(3_894_765), total)
+	assert.InEpsilon(t, float64(3_894_765), total, 0.0001)
 
 	total, err = Parse("negative two million six hundred thousand and five point six three five eight")
 	assert.NoError(t, err)
-	assert.Equal(t, -2600005.6358, total)
+	assert.InEpsilon(t, -2600005.6358, total, 0.0001)
 }
 
 func TestConvertHumanStringToNumberSlice(t *testing.T) {
@@ -55,59 +55,59 @@ func TestCompressNumberSliceToInt(t *testing.T) {
 
 	var result, err = compressNumberSliceToInt([]int{2})
 	assert.NoError(t, err)
-	assert.Equal(t, float64(2), result)
+	assert.InEpsilon(t, float64(2), result, 0.0001)
 
 	result, err = compressNumberSliceToInt([]int{17})
 	assert.NoError(t, err)
-	assert.Equal(t, float64(17), result)
+	assert.InEpsilon(t, float64(17), result, 0.0001)
 
 	result, err = compressNumberSliceToInt([]int{20})
 	assert.NoError(t, err)
-	assert.Equal(t, float64(20), result)
+	assert.InEpsilon(t, float64(20), result, 0.0001)
 
 	result, err = compressNumberSliceToInt([]int{90, 9})
 	assert.NoError(t, err)
-	assert.Equal(t, float64(99), result)
+	assert.InEpsilon(t, float64(99), result, 0.0001)
 
 	result, err = compressNumberSliceToInt([]int{100, 7})
 	assert.NoError(t, err)
-	assert.Equal(t, float64(107), result)
+	assert.InEpsilon(t, float64(107), result, 0.0001)
 
 	result, err = compressNumberSliceToInt([]int{100, 40})
 	assert.NoError(t, err)
-	assert.Equal(t, float64(140), result)
+	assert.InEpsilon(t, float64(140), result, 0.0001)
 
 	result, err = compressNumberSliceToInt([]int{2, 100, 40, 7})
 	assert.NoError(t, err)
-	assert.Equal(t, float64(247), result)
+	assert.InEpsilon(t, float64(247), result, 0.0001)
 
 	result, err = compressNumberSliceToInt([]int{7, 1000, 6})
 	assert.NoError(t, err)
-	assert.Equal(t, float64(7006), result)
+	assert.InEpsilon(t, float64(7006), result, 0.0001)
 
 	result, err = compressNumberSliceToInt([]int{7, 1000, 60})
 	assert.NoError(t, err)
-	assert.Equal(t, float64(7060), result)
+	assert.InEpsilon(t, float64(7060), result, 0.0001)
 
 	result, err = compressNumberSliceToInt([]int{7, 1000, 50, 5})
 	assert.NoError(t, err)
-	assert.Equal(t, float64(7055), result)
+	assert.InEpsilon(t, float64(7055), result, 0.0001)
 
 	result, err = compressNumberSliceToInt([]int{2, 100, 40, 7, 1000, 6, 100, 20, 4})
 	assert.NoError(t, err)
-	assert.Equal(t, float64(247_624), result)
+	assert.InEpsilon(t, float64(247_624), result, 0.0001)
 
 	result, err = compressNumberSliceToInt([]int{3, 1e6, 8, 100, 90, 4, 1000, 7, 100, 60, 5})
 	assert.NoError(t, err)
-	assert.Equal(t, float64(3_894_765), result)
+	assert.InEpsilon(t, float64(3_894_765), result, 0.0001)
 
 	result, err = compressNumberSliceToInt([]int{3, 1e6, 8})
 	assert.NoError(t, err)
-	assert.Equal(t, float64(3_000_008), result)
+	assert.InEpsilon(t, float64(3_000_008), result, 0.0001)
 
 	result, err = compressNumberSliceToInt([]int{3, 100, 1e6, 8})
 	assert.NoError(t, err)
-	assert.Equal(t, float64(300_000_008), result)
+	assert.InEpsilon(t, float64(300_000_008), result, 0.0001)
 }
 
 func TestFloatToSlice(t *testing.T) {

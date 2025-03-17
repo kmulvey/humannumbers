@@ -1,9 +1,15 @@
 package humannumbers
 
 import (
+	"errors"
 	"fmt"
 	"strconv"
 	"strings"
+)
+
+var (
+	errUnknownWord           = errors.New("unknown word")
+	errNumberArrayNotReduced = errors.New("number array was not fully reduced")
 )
 
 // Parse takes a string containing numbers in the form
@@ -58,7 +64,7 @@ func Parse(humanString string) (float64, error) {
 }
 
 // handleDecimals is pretty simple, due to the language, it just
-// smashes the digits together behind the decimal point
+// smashes the digits together behind the decimal point.
 func handleDecimals(humanString string) (float64, error) {
 	var decimalArr, err = convertHumanStringToNumberSlice(humanString)
 	if err != nil {
@@ -93,7 +99,7 @@ func convertHumanStringToNumberSlice(humanString string) ([]int, error) {
 		} else if num, has := largeMagnitudes[word]; has {
 			numbers[i] = num
 		} else {
-			return nil, fmt.Errorf("unknown word '%s'", word)
+			return nil, fmt.Errorf("%w: '%s'", errUnknownWord, word)
 		}
 	}
 	return numbers, nil
@@ -113,7 +119,7 @@ func compressNumberSliceToInt(numbers []int) (float64, error) {
 	}
 
 	// calculate decades
-	for i := 0; i < len(numbers)-1; i++ {
+	for i := range len(numbers) - 1 {
 		if numbers[i] >= 20 && numbers[i] <= 90 {
 			if numbers[i+1] > 0 && numbers[i+1] < 10 {
 				numbers[i] += numbers[i+1]
@@ -128,7 +134,7 @@ func compressNumberSliceToInt(numbers []int) (float64, error) {
 			if numbers[i-1] > 0 && numbers[i-1] < 10 {
 				numbers[i] = num * numbers[i-1]
 				numbers = remove(numbers, i-1)
-				i -= 1
+				i--
 			}
 		}
 		if i < len(numbers)-1 && numbers[i] >= 100 && numbers[i] < 1000 {
@@ -144,7 +150,7 @@ func compressNumberSliceToInt(numbers []int) (float64, error) {
 		if i > 0 && numbers[i] >= 1000 && numbers[i-1] < 1000 {
 			numbers[i] *= numbers[i-1]
 			numbers = remove(numbers, i-1)
-			i -= 1
+			i--
 		}
 	}
 
@@ -157,13 +163,13 @@ func compressNumberSliceToInt(numbers []int) (float64, error) {
 	}
 
 	if len(numbers) != 1 {
-		return 0.0, fmt.Errorf("number array was no fully reduced: %+v", numbers)
+		return 0.0, fmt.Errorf("%w: %+v", errNumberArrayNotReduced, numbers)
 	}
 
 	return float64(numbers[0]), nil
 }
 
-// floatToString is a work in progress, its intention is to turn floats into human text
+// floatToString is a work in progress, its intention is to turn floats into human text.
 func floatToString(number float64) string {
 	var numArr = strings.Split(strconv.FormatFloat(number, 'f', -1, 64), ".")
 	var minorMultiple = 1

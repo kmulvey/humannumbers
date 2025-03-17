@@ -1,5 +1,6 @@
 package humannumbers
 
+// nolint: gochecknoglobals
 var base = map[string]int{
 	"zero":      0,
 	"one":       1,
@@ -23,6 +24,7 @@ var base = map[string]int{
 	"nineteen":  19,
 }
 
+// nolint: gochecknoglobals
 var baseReverse = map[int]string{
 	0:  "zero",
 	1:  "one",
@@ -46,6 +48,7 @@ var baseReverse = map[int]string{
 	19: "nineteen",
 }
 
+// nolint: gochecknoglobals
 var decades = map[string]int{
 	"twenty":  20,
 	"thirty":  30,
@@ -57,6 +60,7 @@ var decades = map[string]int{
 	"ninety":  90,
 }
 
+// nolint: gochecknoglobals
 var decadesReverse = map[int]string{
 	20: "twenty",
 	30: "thirty",
@@ -68,6 +72,7 @@ var decadesReverse = map[int]string{
 	90: "ninety",
 }
 
+// nolint: gochecknoglobals
 var largeMagnitudes = map[string]int{
 	"thousand":    1000,
 	"million":     1e6,
@@ -79,6 +84,7 @@ var largeMagnitudes = map[string]int{
 
 // largeMagToString is a convience func to work the above map
 // maybe we no longer need the map?
+// nolint: gochecknoglobals
 func largeMagToString(number int) string {
 	switch {
 	case number >= 100 && number < 1000:
