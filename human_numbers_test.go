@@ -1,6 +1,7 @@
 package humannumbers
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -121,4 +122,18 @@ func TestFloatToSlice(t *testing.T) {
 	assert.Equal(t, "nine hundred eighty seven million six hundred fifty four thousand three hundred twenty one", floatToString(987_654_321))
 	assert.Equal(t, "one hundred twenty three billion nine hundred eighty seven million six hundred fifty four thousand three hundred twenty one", floatToString(123_987_654_321))
 	assert.Equal(t, "one hundred twenty three trillion four hundred fifty six billion nine hundred eighty seven million six hundred fifty four thousand three hundred twenty one", floatToString(123_456_987_654_321))
+}
+
+func TestSliceToInt(t *testing.T) {
+	t.Parallel()
+
+	var result, err = sliceToInt("seven thousand one hundred twenty three")
+	assert.NoError(t, err)
+	assert.Equal(t, int64(7_123), result)
+
+	result, err = sliceToInt("eighteen billion four million seven thousand one hundred twenty three")
+	assert.NoError(t, err)
+	assert.Equal(t, int64(18_004_007_123), result)
+
+	fmt.Println(18_004_007_123)
 }

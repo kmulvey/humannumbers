@@ -119,7 +119,7 @@ func compressNumberSliceToInt(numbers []int) (float64, error) {
 	}
 
 	// calculate decades
-	for i := range len(numbers) - 1 {
+	for i := 0; i < len(numbers)-1; i++ {
 		if numbers[i] >= 20 && numbers[i] <= 90 {
 			if numbers[i+1] > 0 && numbers[i+1] < 10 {
 				numbers[i] += numbers[i+1]
@@ -167,6 +167,50 @@ func compressNumberSliceToInt(numbers []int) (float64, error) {
 	}
 
 	return float64(numbers[0]), nil
+}
+
+// three million eight hundred and ninety four thousand seven hundred and sixty five
+// seven thousand one hundred twenty three
+// 3
+// 20
+// 100
+// 1
+// 1000
+// 7
+// 7123
+// 3 1_000_000 8 100 90 4 1_000 7 100 60 5
+func sliceToInt(humanString string) (int64, error) {
+	var total int64
+	var previousNum int64
+	var section int64
+
+	var humanArr = strings.Fields(humanString)
+
+	for _, word := range humanArr {
+		if num, has := base[word]; has {
+			if num < int(previousNum) { // section end
+				total += section
+				section = int64(num)
+			} else {
+				section += int64(num)
+			}
+			previousNum = int64(num)
+		} else if num, has := decades[word]; has {
+			if num < int(previousNum) { // section end
+				total += section
+				section = int64(num)
+			} else {
+				section *= int64(num)
+			}
+			previousNum = int64(num)
+		} else if num, has := largeMagnitudes[word]; has {
+			section *= int64(num)
+			previousNum = int64(num)
+		} else {
+			//			return 0, fmt.Errorf("%w: '%s'", errUnknownWord, word)
+		}
+	}
+	return total, nil
 }
 
 // floatToString is a work in progress, its intention is to turn floats into human text.
