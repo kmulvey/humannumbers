@@ -125,6 +125,9 @@ func TestSliceToInt(t *testing.T) {
 	var result = parseIntString("three")
 	assert.Equal(t, 3, result)
 
+	result = parseIntString("zero")
+	assert.Equal(t, 0, result)
+
 	result = parseIntString("twelve thousand one hundred twenty")
 	assert.Equal(t, 12_120, result)
 

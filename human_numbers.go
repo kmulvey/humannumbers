@@ -22,28 +22,15 @@ func Parse(humanString string) (int, error) {
 	humanString = strings.ToLower(humanString)
 	humanString = strings.ReplaceAll(humanString, " and ", " ")
 
+	if err := validateInput(humanString); err != nil {
+		return 0, err
+	}
+
 	if strings.Contains(humanString, "point") || strings.Contains(humanString, "dot") {
 		return 0, errors.New("decimal numbers not supported in Parse, use ParseFloat instead")
 	}
 
 	return parseIntString(humanString), nil
-}
-
-// handleDecimals is pretty simple, due to the language, it just
-// smashes the digits together behind the decimal point.
-func handleDecimals(humanString string) (float64, error) {
-	var decimalArr, err = convertHumanStringToNumberSlice(humanString)
-	if err != nil {
-		return 0, err
-	}
-
-	var total float64
-	var multiplier = 0.1
-	for _, digit := range decimalArr {
-		total += float64(digit) * multiplier
-		multiplier *= .10
-	}
-	return total, nil
 }
 
 // convertHumanStringToNumberSlice loops through the give string and places the
@@ -166,6 +153,24 @@ func parseIntString(humanString string) int {
 		total *= -1
 	}
 	return total
+}
+
+func validateInput(humanString string) error {
+	if humanString == "" {
+		return fmt.Errorf("input string is empty")
+	}
+
+	for _, word := range strings.Fields(humanString) {
+		if _, has := baseNumbers[word]; !has {
+			if _, has := largeMagnitudes[word]; !has {
+				if word != hundred && word != "point" && word != "dot" && word != "negative" {
+					return fmt.Errorf("invalid word in input: %s", word)
+				}
+			}
+		}
+	}
+
+	return nil
 }
 
 // floatToString is a work in progress, its intention is to turn floats into human text.
