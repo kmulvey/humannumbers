@@ -1,7 +1,7 @@
 package humannumbers
 
 // nolint: gochecknoglobals
-var base = map[string]int{
+var baseNumbers = map[string]int{
 	"zero":      0,
 	"one":       1,
 	"two":       2,
@@ -20,9 +20,19 @@ var base = map[string]int{
 	"fifteen":   15,
 	"sixteen":   16,
 	"seventeen": 17,
-	"eightteen": 18,
+	"eighteen":  18,
 	"nineteen":  19,
+	"twenty":    20,
+	"thirty":    30,
+	"forty":     40,
+	"fifty":     50,
+	"sixty":     60,
+	"seventy":   70,
+	"eighty":    80,
+	"ninety":    90,
 }
+
+var hundred = "hundred"
 
 // nolint: gochecknoglobals
 var baseReverse = map[int]string{

@@ -15,52 +15,18 @@ var (
 // Parse takes a string containing numbers in the form
 // of words, currently only English, and converts it
 // to float64. Examples:
-// two
 // forty three
-// eight thousand
-// eight hundred and six
-// one thousand six hundred and forty
-// two thousand three hundred and eighty seven
 // two hundred and forty six thousand three hundred and eighty seven.
-func Parse(humanString string) (float64, error) {
+func Parse(humanString string) (int, error) {
 	// some linting
 	humanString = strings.ToLower(humanString)
 	humanString = strings.ReplaceAll(humanString, " and ", " ")
-	// handle negatives
-	var negative = strings.Contains(humanString, "negative")
-	humanString = strings.ReplaceAll(humanString, "negative", " ")
 
-	// handle decimals
-	var base = humanString
-	var decimal float64
-	var err error
-	if strings.Contains(humanString, "point") {
-		var arr = strings.Split(base, "point")
-		base = arr[0]
-		decimal, err = handleDecimals(arr[1])
-		if err != nil {
-			return 0, err
-		}
+	if strings.Contains(humanString, "point") || strings.Contains(humanString, "dot") {
+		return 0, errors.New("decimal numbers not supported in Parse, use ParseFloat instead")
 	}
 
-	baseArr, err := convertHumanStringToNumberSlice(base)
-	if err != nil {
-		return 0, err
-	}
-
-	baseTotal, err := compressNumberSliceToInt(baseArr)
-	if err != nil {
-		return 0, err
-	}
-
-	if decimal != 0.0 {
-		baseTotal += decimal
-	}
-	if negative {
-		baseTotal *= -1
-	}
-
-	return baseTotal, nil
+	return parseIntString(humanString), nil
 }
 
 // handleDecimals is pretty simple, due to the language, it just
@@ -90,7 +56,7 @@ func convertHumanStringToNumberSlice(humanString string) ([]int, error) {
 	var numbers = make([]int, len(humanArr))
 
 	for i, word := range humanArr {
-		if num, has := base[word]; has {
+		if num, has := baseNumbers[word]; has {
 			numbers[i] = num
 		} else if num, has := decades[word]; has {
 			numbers[i] = num
@@ -169,56 +135,37 @@ func compressNumberSliceToInt(numbers []int) (float64, error) {
 	return float64(numbers[0]), nil
 }
 
-// three million eight hundred and ninety four thousand seven hundred and sixty five
-// seven thousand one hundred twenty three
-// 3
-// 20
-// 100
-// 1
-// 1000
-// 7
-// 7123
-// 3 1_000_000 8 100 90 4 1_000 7 100 60 5
-func sliceToInt(humanString string) (int64, error) {
-	var total int64
-	var previousNum int64
-	var section int64
-
+func parseIntString(humanString string) int {
+	var total int
+	var section int
 	var humanArr = strings.Fields(humanString)
 
-	for i := len(humanArr) - 1; i >= 0; i-- {
-		var word = humanArr[i]
-
-		if num, has := base[word]; has {
-			if num > int(previousNum) {
-				section = int64(num)
-			} else { // section end
-				total += section
-				section = int64(num)
-			}
-			previousNum = int64(num)
-
-		} else if num, has := decades[word]; has {
-			if num > int(previousNum) {
-				section += int64(num)
-			} else { // section end
-				total += section
-				section = int64(num)
-			}
-			previousNum = int64(num)
-		} else if num, has := largeMagnitudes[word]; has {
-			if num > int(previousNum) {
-				total += section
-				section = int64(num)
-			} else { // section end
-				section *= int64(num)
-			}
-			previousNum = int64(num)
-		} else {
-			//			return 0, fmt.Errorf("%w: '%s'", errUnknownWord, word)
+	var largeMagnitudesIndicies = make(map[int]struct{})
+	for i, word := range humanArr {
+		if _, has := largeMagnitudes[word]; has {
+			largeMagnitudesIndicies[i] = struct{}{}
 		}
 	}
-	return total, nil
+
+	for i, word := range humanArr {
+		if num, has := baseNumbers[word]; has {
+			section += num
+		} else if word == hundred {
+			section *= 100
+		} else if num, has := largeMagnitudes[word]; has {
+			section *= num
+			if _, has := largeMagnitudesIndicies[i]; has {
+				total += section
+				section = 0
+			}
+		}
+	}
+	total += section
+
+	if strings.HasPrefix(humanString, "negative") {
+		total *= -1
+	}
+	return total
 }
 
 // floatToString is a work in progress, its intention is to turn floats into human text.
