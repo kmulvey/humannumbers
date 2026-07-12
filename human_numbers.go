@@ -11,11 +11,8 @@ var (
 	errNumberArrayNotReduced = errors.New("number array was not fully reduced")
 )
 
-// Parse takes a string containing numbers in the form
-// of words, currently only English, and converts it
-// to float64. Examples:
-// forty three
-// two hundred and forty six thousand three hundred and eighty seven.
+// Parse takes an english string containing numbers in the form of words and converts it to an integer.
+// Examples: forty three, two hundred and forty six thousand three hundred and eighty seven.
 func Parse(humanString string) (int, error) {
 	// some linting
 	humanString = strings.ToLower(humanString)
@@ -32,6 +29,7 @@ func Parse(humanString string) (int, error) {
 	return parseIntString(humanString), nil
 }
 
+// parseIntString converts a human-readable number string into an integer.
 func parseIntString(humanString string) int {
 	var total int
 	var section int
@@ -65,6 +63,7 @@ func parseIntString(humanString string) int {
 	return total
 }
 
+// validateInput checks if the input string contains only valid number words.
 func validateInput(humanString string) error {
 	if humanString == "" {
 		return fmt.Errorf("input string is empty")

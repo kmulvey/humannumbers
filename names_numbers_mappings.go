@@ -35,54 +35,6 @@ var baseNumbers = map[string]int{
 var hundred = "hundred"
 
 // nolint: gochecknoglobals
-var baseReverse = map[int]string{
-	0:  "zero",
-	1:  "one",
-	2:  "two",
-	3:  "three",
-	4:  "four",
-	5:  "five",
-	6:  "six",
-	7:  "seven",
-	8:  "eight",
-	9:  "nine",
-	10: "ten",
-	11: "eleven",
-	12: "twelve",
-	13: "thirteen",
-	14: "fourteen",
-	15: "fifteen",
-	16: "sixteen",
-	17: "seventeen",
-	18: "eightteen",
-	19: "nineteen",
-}
-
-// nolint: gochecknoglobals
-var decades = map[string]int{
-	"twenty":  20,
-	"thirty":  30,
-	"forty":   40,
-	"fifty":   50,
-	"sixty":   60,
-	"seventy": 70,
-	"eighty":  80,
-	"ninety":  90,
-}
-
-// nolint: gochecknoglobals
-var decadesReverse = map[int]string{
-	20: "twenty",
-	30: "thirty",
-	40: "forty",
-	50: "fifty",
-	60: "sixty",
-	70: "seventy",
-	80: "eighty",
-	90: "ninety",
-}
-
-// nolint: gochecknoglobals
 var largeMagnitudes = map[string]int{
 	"hundred":     100,
 	"thousand":    1000,
