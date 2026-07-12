@@ -42,23 +42,3 @@ var largeMagnitudes = map[string]int{
 	"quadrillion": 1e15,
 	"quintillion": 1e18,
 }
-
-// largeMagToString is a convience func to work the above map
-// maybe we no longer need the map?
-func largeMagToString(number int) string {
-	switch {
-	case number >= 100 && number < 1000:
-		return "hundred"
-	case number >= 1000 && number < 1e6:
-		return "thousand"
-	case number >= 1e6 && number < 1e9:
-		return "million"
-	case number >= 1e9 && number < 1e12:
-		return "billion"
-	case number >= 1e12 && number < 1e15:
-		return "trillion"
-	case number >= 1e15 && number < 1e18:
-		return "quadrillion"
-	}
-	return ""
-}

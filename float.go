@@ -2,7 +2,7 @@ package humannumbers
 
 import "strings"
 
-// Parse takes an english string containing numbers in the form of words and converts it to float64.
+// ParseFloat takes an english string containing numbers in the form of words and converts it to float64.
 // Examples: forty three, two hundred and forty six thousand three hundred and eighty seven.
 func ParseFloat(humanString string) (float64, error) {
 	// some linting

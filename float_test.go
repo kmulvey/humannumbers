@@ -23,10 +23,11 @@ func TestHandleDecimals(t *testing.T) {
 
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
 			result := handleDecimals(test.input)
 
 			if test.expected == 0.0 {
-				assert.Equal(t, test.expected, result)
+			assert.Zero(t, result)
 			} else {
 				assert.InEpsilon(t, test.expected, result, 0.0001)
 			}
@@ -92,11 +93,12 @@ func TestParseFloat(t *testing.T) {
 
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
 			result, err := ParseFloat(test.input)
 			assert.NoError(t, err)
 
 			if test.expected == 0.0 {
-				assert.Equal(t, test.expected, result)
+			assert.Zero(t, result)
 			} else {
 				assert.InEpsilon(t, test.expected, result, 0.0001)
 			}
@@ -118,6 +120,7 @@ func TestParseFloatErrors(t *testing.T) {
 
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
 			_, err := ParseFloat(test.input)
 			assert.Error(t, err)
 		})

@@ -70,7 +70,7 @@ func validateInput(humanString string) error {
 		return errEmptyInput
 	}
 
-	for _, word := range strings.Fields(humanString) {
+	for word := range strings.FieldsSeq(humanString) {
 		if _, has := baseNumbers[word]; !has {
 			if _, has := largeMagnitudes[word]; !has {
 				if word != hundred && word != "point" && word != "dot" && word != "negative" {
