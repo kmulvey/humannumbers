@@ -7,8 +7,9 @@ import (
 )
 
 var (
-	errUnknownWord           = errors.New("unknown word")
-	errNumberArrayNotReduced = errors.New("number array was not fully reduced")
+	errDecimalNotSupported = errors.New("decimal numbers not supported in Parse, use ParseFloat instead")
+	errEmptyInput          = errors.New("input string is empty")
+	errInvalidWord         = errors.New("invalid word in input")
 )
 
 // Parse takes an english string containing numbers in the form of words and converts it to an integer.
@@ -23,7 +24,7 @@ func Parse(humanString string) (int, error) {
 	}
 
 	if strings.Contains(humanString, "point") || strings.Contains(humanString, "dot") {
-		return 0, errors.New("decimal numbers not supported in Parse, use ParseFloat instead")
+		return 0, errDecimalNotSupported
 	}
 
 	return parseIntString(humanString), nil
@@ -66,22 +67,18 @@ func parseIntString(humanString string) int {
 // validateInput checks if the input string contains only valid number words.
 func validateInput(humanString string) error {
 	if humanString == "" {
-		return fmt.Errorf("input string is empty")
+		return errEmptyInput
 	}
 
 	for _, word := range strings.Fields(humanString) {
 		if _, has := baseNumbers[word]; !has {
 			if _, has := largeMagnitudes[word]; !has {
 				if word != hundred && word != "point" && word != "dot" && word != "negative" {
-					return fmt.Errorf("invalid word in input: %s", word)
+					return fmt.Errorf("%w: %s", errInvalidWord, word)
 				}
 			}
 		}
 	}
 
 	return nil
-}
-
-func remove(slice []int, s int) []int {
-	return append(slice[:s], slice[s+1:]...)
 }

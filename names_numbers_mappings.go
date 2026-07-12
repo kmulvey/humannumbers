@@ -1,6 +1,5 @@
 package humannumbers
 
-// nolint: gochecknoglobals
 var baseNumbers = map[string]int{
 	"zero":      0,
 	"one":       1,
@@ -34,7 +33,6 @@ var baseNumbers = map[string]int{
 
 var hundred = "hundred"
 
-// nolint: gochecknoglobals
 var largeMagnitudes = map[string]int{
 	"hundred":     100,
 	"thousand":    1000,
@@ -47,7 +45,6 @@ var largeMagnitudes = map[string]int{
 
 // largeMagToString is a convience func to work the above map
 // maybe we no longer need the map?
-// nolint: gochecknoglobals
 func largeMagToString(number int) string {
 	switch {
 	case number >= 100 && number < 1000:

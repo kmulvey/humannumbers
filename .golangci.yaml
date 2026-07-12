@@ -26,7 +26,9 @@ linters:
     - noctx # context not used in this codebase
     - gochecknoinits # we use init for prometheus metrics registration
     - noinlineerr # we don't care about inlining errors
-    - goconst
+    - goconst # constant strings should not be repeated
+    - gochecknoglobals # needed for the word to number mappings
+    - dupword # duplicate words are needed in tests
   settings:
     revive:
       rules:

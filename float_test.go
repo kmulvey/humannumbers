@@ -7,6 +7,8 @@ import (
 )
 
 func TestHandleDecimals(t *testing.T) {
+	t.Parallel()
+
 	tests := []struct {
 		name     string
 		input    string
@@ -21,8 +23,7 @@ func TestHandleDecimals(t *testing.T) {
 
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			result, err := handleDecimals(test.input)
-			assert.NoError(t, err)
+			result := handleDecimals(test.input)
 
 			if test.expected == 0.0 {
 				assert.Equal(t, test.expected, result)

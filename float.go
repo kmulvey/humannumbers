@@ -44,10 +44,7 @@ func ParseFloat(humanString string) (float64, error) {
 	var total = float64(parseIntString(integerPart))
 
 	if fractionalPart != "" {
-		decimals, err := handleDecimals(fractionalPart)
-		if err != nil {
-			return 0, err
-		}
+		decimals := handleDecimals(fractionalPart)
 		total += decimals
 	}
 
@@ -59,7 +56,7 @@ func ParseFloat(humanString string) (float64, error) {
 }
 
 // handleDecimals converts the fractional part of a human-readable number string
-func handleDecimals(humanString string) (float64, error) {
+func handleDecimals(humanString string) float64 {
 	var total float64
 	var multiplier = 0.1
 	var humanArr = strings.Fields(humanString)
@@ -71,5 +68,5 @@ func handleDecimals(humanString string) (float64, error) {
 		}
 	}
 
-	return total, nil
+	return total
 }
