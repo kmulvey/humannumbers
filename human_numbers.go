@@ -186,25 +186,33 @@ func sliceToInt(humanString string) (int64, error) {
 
 	var humanArr = strings.Fields(humanString)
 
-	for _, word := range humanArr {
+	for i := len(humanArr) - 1; i >= 0; i-- {
+		var word = humanArr[i]
+
 		if num, has := base[word]; has {
-			if num < int(previousNum) { // section end
+			if num > int(previousNum) {
+				section = int64(num)
+			} else { // section end
 				total += section
 				section = int64(num)
-			} else {
-				section += int64(num)
 			}
 			previousNum = int64(num)
+
 		} else if num, has := decades[word]; has {
-			if num < int(previousNum) { // section end
+			if num > int(previousNum) {
+				section += int64(num)
+			} else { // section end
 				total += section
 				section = int64(num)
-			} else {
-				section *= int64(num)
 			}
 			previousNum = int64(num)
 		} else if num, has := largeMagnitudes[word]; has {
-			section *= int64(num)
+			if num > int(previousNum) {
+				total += section
+				section = int64(num)
+			} else { // section end
+				section *= int64(num)
+			}
 			previousNum = int64(num)
 		} else {
 			//			return 0, fmt.Errorf("%w: '%s'", errUnknownWord, word)

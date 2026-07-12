@@ -74,6 +74,7 @@ var decadesReverse = map[int]string{
 
 // nolint: gochecknoglobals
 var largeMagnitudes = map[string]int{
+	"hundred":     100,
 	"thousand":    1000,
 	"million":     1e6,
 	"billion":     1e9,
