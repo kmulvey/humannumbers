@@ -27,7 +27,7 @@ func TestHandleDecimals(t *testing.T) {
 			result := handleDecimals(test.input)
 
 			if test.expected == 0.0 {
-			assert.Zero(t, result)
+				assert.Zero(t, result)
 			} else {
 				assert.InEpsilon(t, test.expected, result, 0.0001)
 			}
@@ -35,6 +35,7 @@ func TestHandleDecimals(t *testing.T) {
 	}
 }
 
+// nolint:funlen
 func TestParseFloat(t *testing.T) {
 	t.Parallel()
 
@@ -89,6 +90,21 @@ func TestParseFloat(t *testing.T) {
 		// Case insensitivity
 		{"uppercase", "FORTY THREE", 43.0},
 		{"mixed case", "FoRtY ThReE", 43.0},
+
+		// Large magnitude decimals
+		{"quadrillion with decimal", "one quadrillion point one", 1e15 + 0.1},
+		{"trillion with large decimal", "eight trillion point five", 8e12 + 0.5},
+
+		// Decimals with leading zeros
+		{"decimal leading zeros", "ten point zero one two three", 10.0123},
+		{"point zero zero one", "one hundred point zero zero one", 100.001},
+
+		// Negative with separators and decimals
+		{"negative with and and decimal", "negative five thousand and twenty point five", -5020.5},
+		{"negative billion decimal", "negative one billion point zero zero one", -1e9 - 0.001},
+
+		// Edge case: just zero point fractional
+		{"zero with decimal", "zero point one two three", 0.123},
 	}
 
 	for _, test := range tests {
@@ -98,7 +114,7 @@ func TestParseFloat(t *testing.T) {
 			assert.NoError(t, err)
 
 			if test.expected == 0.0 {
-			assert.Zero(t, result)
+				assert.Zero(t, result)
 			} else {
 				assert.InEpsilon(t, test.expected, result, 0.0001)
 			}
@@ -113,6 +129,7 @@ func TestParseFloatErrors(t *testing.T) {
 		name  string
 		input string
 	}{
+		{"empty string", ""},
 		{"unknown word", "blah"},
 		{"unknown in number", "five blah three"},
 		{"unknown in decimal", "five point blah"},

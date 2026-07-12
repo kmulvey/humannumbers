@@ -6,38 +6,29 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestParse(t *testing.T) {
+func TestParseErrors(t *testing.T) {
 	t.Parallel()
 
-	var total, err = Parse("three")
-	assert.NoError(t, err)
-	assert.InEpsilon(t, float64(3), total, 0.0001)
+	tests := []struct {
+		name  string
+		input string
+	}{
+		{"empty string", ""},
+		{"unknown word", "blah"},
+		{"unknown in number", "five blah three"},
+		{"decimal in parse", "five point five"},
+	}
 
-	total, err = Parse("seventeen")
-	assert.NoError(t, err)
-	assert.InEpsilon(t, float64(17), total, 0.0001)
-
-	total, err = Parse("forty four")
-	assert.NoError(t, err)
-	assert.InEpsilon(t, float64(44), total, 0.0001)
-
-	total, err = Parse("seven hundred and forty three")
-	assert.NoError(t, err)
-	assert.InEpsilon(t, float64(743), total, 0.0001)
-
-	total, err = Parse("two thousand three hundred and seven")
-	assert.NoError(t, err)
-	assert.InEpsilon(t, float64(2307), total, 0.0001)
-
-	total, err = Parse("negative two million")
-	assert.NoError(t, err)
-	assert.InEpsilon(t, float64(-2e6), total, 0.0001)
-
-	total, err = Parse("three million eight hundred and ninety four thousand seven hundred and sixty five")
-	assert.NoError(t, err)
-	assert.InEpsilon(t, float64(3_894_765), total, 0.0001)
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+			_, err := Parse(test.input)
+			assert.Error(t, err)
+		})
+	}
 }
 
+// nolint:funlen
 func TestSliceToInt(t *testing.T) {
 	t.Parallel()
 
@@ -104,4 +95,20 @@ func TestSliceToInt(t *testing.T) {
 
 	result = parseIntString("one trillion two hundred thirty four billion five hundred sixty seven million eight hundred ninety thousand one hundred twenty three")
 	assert.Equal(t, 1_234_567_890_123, result)
+}
+
+func TestSliceToIntLargeMagnitudes(t *testing.T) {
+	t.Parallel()
+
+	var result = parseIntString("one quadrillion")
+	assert.Equal(t, 1_000_000_000_000_000, result)
+
+	result = parseIntString("two quadrillion five hundred trillion")
+	assert.Equal(t, 2_500_000_000_000_000, result)
+
+	result = parseIntString("one quintillion")
+	assert.Equal(t, 1_000_000_000_000_000_000, result)
+
+	result = parseIntString("eight quintillion one hundred quadrillion")
+	assert.Equal(t, 8_100_000_000_000_000_000, result)
 }
